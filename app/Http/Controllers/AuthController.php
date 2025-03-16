@@ -6,10 +6,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Jobs\SendWelcomeEmail;
 
 class AuthController extends Controller
 {
-    public function register(Request $requset)
+    public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -22,6 +23,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        SendWelcomeEmail::dispatch($user);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

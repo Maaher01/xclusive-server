@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ProductRequest;
 
 class ProductsController extends Controller
 {
@@ -21,23 +22,9 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string']
-        ]);
-
-        if($validator->fails()) {
-            return response()->json(['status' => false, 'message' => 'Validation Error', 'errors' => $validator->errors()], 403);
-        }
-
-        $product = Product::create([
-            'name' => $request->name,
-            'price' => $request->price,
-            'description' => $request->description
-        ]);
+        Product::create($request->validated());
 
         return response()->json(['status' => true, 'data' => $product], 200);
     }
@@ -53,19 +40,9 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string']
-        ]);
-
-        if($validator->fails()) {
-            return response()->json(['status' => false, 'message' => 'Validation Error', 'errors' => $validator->errors()], 403);
-        }
-
-        $product->update($request->only(['name', 'price', 'description']));
+        $product->update($request->validated());
 
         return response()->json(['status' => true, 'data' => $product], 200);
     }
