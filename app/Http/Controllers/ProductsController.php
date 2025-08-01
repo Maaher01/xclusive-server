@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ProductRequest;
 
 class ProductsController extends Controller
@@ -12,7 +10,7 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
         $products = Product::all();
 
@@ -22,9 +20,11 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request, Product $product)
     {
-        Product::create($request->validated());
+        $this->authorize('create', $product);
+
+        $product = Product::create($request->validated());
 
         return response()->json(['status' => true, 'data' => $product], 200);
     }
@@ -34,6 +34,8 @@ class ProductsController extends Controller
      */
     public function show(Product $product)
     {
+        $this->authorize('view', $product);
+
         return response()->json(['status' => true, 'data' => $product], 200);
     }
 
@@ -42,6 +44,8 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
+        $this->authorize('update', $product);
+
         $product->update($request->validated());
 
         return response()->json(['status' => true, 'data' => $product], 200);
@@ -52,6 +56,8 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product)
     {
+        $this->authorize('delete', $product);
+
         $product->delete();
 
         return response()->json(['status' => true, 'message' => 'Product deleted successfully']);
