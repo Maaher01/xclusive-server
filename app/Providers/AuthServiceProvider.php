@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Policies\ProductPolicy;
-use Illuminate\Support\ServiceProvider;
 use App\Models\Product;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
