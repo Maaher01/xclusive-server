@@ -3,17 +3,24 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('products', [ProductsController::class, 'index'])->name('products.index');
-    Route::post('products', [ProductsController::class, 'store'])->name('products.store');
-    Route::get('products/{product}', [ProductsController::class, 'show'])->name('products.show');
-    Route::patch('products/{product}', [ProductsController::class, 'update'])->name('products.update');
-    Route::delete('products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('', [ProductsController::class, 'index'])->name('index');
+        Route::post('', [ProductsController::class, 'store'])->name('store');
+        Route::get('{product}', [ProductsController::class, 'show'])->name('show');
+        Route::patch('{product}', [ProductsController::class, 'update'])->name('update');
+        Route::delete('{product}', [ProductsController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('get-all-user-orders', [OrdersController::class, 'getUserOrders'])->name('getUserOrders');
+    });
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
