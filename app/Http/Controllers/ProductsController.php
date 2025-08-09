@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Interfaces\ProductRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 
@@ -22,7 +23,7 @@ class ProductsController extends Controller
     public function index()
     {
         $products = Cache::remember('products', 600, function () {
-            return $this->productRepo->all();
+            return ProductResource::collection($this->productRepo->all());
         });
 
         return response()->json(['status' => true, 'data' => $products], 200);

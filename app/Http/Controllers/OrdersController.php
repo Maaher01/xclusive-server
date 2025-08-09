@@ -2,42 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderCreated;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 
 class OrdersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function create(Request $request)
     {
-        //
-    }
+        $newOrder = Order::create([
+            'user_id' => $request->user_id,
+            'total_amount' => $request->total_amount,
+            'status' => $request->status
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        broadcast(new OrderCreated($newOrder))->toOthers();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return response()->json(['data' => $newOrder, 'status' => 'Order created successfully', 'broadcasted' => true], 200);
     }
 
     public function getUserOrders(User $user)
@@ -45,29 +27,5 @@ class OrdersController extends Controller
         $userOrders = $user->orders;
 
         return response()->json(['status' => true, 'data' => $userOrders], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
