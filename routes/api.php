@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('orders')->name('orders.')->group(function () {
-        Route::get('get-all-user-orders', [OrdersController::class, 'getUserOrders'])->name('getUserOrders');
+        Route::get('get-all-user-orders/{user}', [OrdersController::class, 'getUserOrders'])->name('getUserOrders');
     });
 
     Route::post('logout', [AuthController::class, 'logout']);

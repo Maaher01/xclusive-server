@@ -4,15 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Http\Requests\ProductRequest;
+use App\Interfaces\ProductRepositoryInterface;
+use Illuminate\Support\Facades\Cache;
 
 class ProductsController extends Controller
 {
+    protected $productRepo;
+
+    public function __construct(ProductRepositoryInterface $productRepo)
+    {
+        $this->productRepo = $productRepo;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Cache::remember('products', 600, function () {
+            return $this->productRepo->all();
+        });
 
         return response()->json(['status' => true, 'data' => $products], 200);
     }
@@ -20,11 +31,12 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductRequest $request, Product $product)
+    public function store(ProductRequest $request)
     {
-        $this->authorize('create', $product);
+        $this->authorize('create', Product::class);
 
-        $product = Product::create($request->validated());
+        $product = $this->productRepo->create($request->validated());
+        Cache::forget('products');
 
         return response()->json(['status' => true, 'data' => $product], 200);
     }
@@ -46,9 +58,9 @@ class ProductsController extends Controller
     {
         $this->authorize('update', $product);
 
-        $product->update($request->validated());
+        $updatedProduct = $this->productRepo->update($product, $request->validated());
 
-        return response()->json(['status' => true, 'data' => $product], 200);
+        return response()->json(['status' => true, 'data' => $updatedProduct], 200);
     }
 
     /**
@@ -58,7 +70,7 @@ class ProductsController extends Controller
     {
         $this->authorize('delete', $product);
 
-        $product->delete();
+        $this->productRepo->delete($product);
 
         return response()->json(['status' => true, 'message' => 'Product deleted successfully']);
     }
