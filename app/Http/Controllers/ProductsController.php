@@ -23,7 +23,11 @@ class ProductsController extends Controller
     public function index()
     {
         $products = Cache::remember('products', 600, function () {
-            return ProductResource::collection($this->productRepo->all());
+            $products = $this->productRepo->all()
+                ->select('id', 'name', 'price', 'description', 'created_at', 'updated_at')
+                ->get();
+
+            return ProductResource::collection($products);
         });
 
         return response()->json(['status' => true, 'data' => $products], 200);

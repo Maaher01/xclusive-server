@@ -9,7 +9,7 @@ class EloquentProductRepository implements ProductRepositoryInterface
 {
     public function all()
     {
-        return Product::all();
+        return Product::query();
     }
 
     public function create(array $data)
