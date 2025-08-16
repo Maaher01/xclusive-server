@@ -44,7 +44,7 @@ class TenantsController extends Controller
                 'db_password' => 'nullable|string'
             ]);
 
-            $databaseName = 'tenant_' . Str::slug($request->name, '_');
+            $databaseName = 'xclusive_' . Str::slug($request->name, '_');
 
             $sql = "CREATE DATABASE IF NOT EXISTS `$databaseName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
 

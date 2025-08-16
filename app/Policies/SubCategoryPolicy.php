@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 
-class ProductPolicy
+class SubCategoryPolicy
 {
     /**
      * Determine whether the user can view the model.
@@ -35,6 +35,6 @@ class ProductPolicy
      */
     public function delete(User $user): bool
     {
-        return in_array($user->role, ['super_admin']);
+        return in_array($user->role, ['admin', 'super_admin']);
     }
 }

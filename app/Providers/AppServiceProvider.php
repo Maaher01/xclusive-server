@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Interfaces\ProductRepositoryInterface;
-use App\Repositories\EloquentProductRepository;
+use App\Repositories\ProductRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Services\DiscountService;
 
@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
             return new DiscountService();
         });
 
-        $this->app->bind(ProductRepositoryInterface::class, EloquentProductRepository::class);
+        $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
     }
 
     /**

@@ -25,7 +25,13 @@ class ProductRequest extends FormRequest
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id'
+            'sku' => 'required|string|max:255|unique:products,sku',
+            'slug' => 'required|string|max:255|unique:products,slug',
+            'discount_amount' => 'required|numeric|min:0',
+            'stock_quantity' => 'required|numeric|min:0',
+            'sold_quantity' => 'required|numeric|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'sub_category_id' => 'required|exists:sub_categories,id'
         ];
     }
 }

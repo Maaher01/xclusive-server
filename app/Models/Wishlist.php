@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Wishlist extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
-        'total_amount',
-        'status',
+        'product_id',
     ];
 
     public function user()
@@ -20,8 +16,8 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function orderItems()
+    public function product()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(Product::class);
     }
 }
