@@ -22,6 +22,10 @@ class Product extends Model
         'sub_category_id'
     ];
 
+    protected $casts = [
+        'discount_amount' => 'float',
+    ];
+
     public function productImages()
     {
         return $this->hasMany(ProductImage::class);

@@ -16,6 +16,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'mobile' => 'required|string|max:255',
             'password' => ['required', 'string', 'confirmed', Password::min(6)->mixedCase()->numbers()],
             'role' => 'required|in:user,admin,super_admin',
         ]);
@@ -23,6 +24,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => trim($request->name),
             'email' => trim($request->email),
+            'mobile' => trim($request->mobile),
             'password' => Hash::make($request->password),
             'role' => $request->role
         ]);
