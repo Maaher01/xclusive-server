@@ -36,8 +36,6 @@ class SubCategoriesController extends Controller
 
         $subCategoryData = $request->validated();
 
-        dd($subCategoryData);
-
         if ($request->hasFile('image')) {
             $subCategoryData['image'] = $request->file('image')->store('sub-category-images', 'public');
         }
