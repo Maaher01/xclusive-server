@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\TenantsController;
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
@@ -17,6 +19,16 @@ Route::middleware(['auth:sanctum', 'throttle:100,1'])->group(function () {
         Route::get('{product}', [ProductsController::class, 'show'])->name('show');
         Route::patch('{product}', [ProductsController::class, 'update'])->name('update');
         Route::delete('{product}', [ProductsController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('categories')->name('categories.')->group(function () {
+        Route::get('', [CategoriesController::class, 'index'])->name('index');
+        Route::post('', [CategoriesController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('sub-categories')->name('sub-categories.')->group(function () {
+        Route::get('', [SubCategoriesController::class, 'index'])->name('index');
+        Route::post('', [SubCategoriesController::class, 'store'])->name('store');
     });
 
     Route::prefix('orders')->name('orders.')->group(function () {
