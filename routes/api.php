@@ -9,8 +9,10 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\TenantsController;
 
-Route::post('register', [AuthController::class, 'register'])->name('auth.register');
-Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+Route::prefix('auth')->name('auth.')->group(function () {
+    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('login', [AuthController::class, 'login'])->name('login');
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('orders')->name('orders.')->group(function () {
@@ -27,10 +29,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('sub-categories', [SubCategoriesController::class, 'store'])->name('sub-categories.store');
 
     Route::prefix('tenants')->name('tenants.')->group(function () {
-        Route::post('', [TenantsController::class, 'onboardTenant'])->name('onboard');
+        Route::post('', [TenantsController::class, 'store'])->name('store');
     });
 
-    Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::post('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
 
 

@@ -34,7 +34,7 @@ class TenantsController extends Controller
         ]);
     }
 
-    public function onboardTenant(Request $request)
+    public function store(Request $request)
     {
         try {
             $request->validate([
