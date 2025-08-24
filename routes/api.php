@@ -9,36 +9,34 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\TenantsController;
 
-Route::post('register', [AuthController::class, 'register'])->name('register');
-Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 
-Route::middleware(['auth:sanctum', 'throttle:100,1'])->group(function () {
-    Route::prefix('products')->name('products.')->group(function () {
-        Route::get('', [ProductsController::class, 'index'])->name('index');
-        Route::post('', [ProductsController::class, 'store'])->name('store');
-        Route::get('{product}', [ProductsController::class, 'show'])->name('show');
-        Route::patch('{product}', [ProductsController::class, 'update'])->name('update');
-        Route::delete('{product}', [ProductsController::class, 'destroy'])->name('destroy');
-    });
-
-    Route::prefix('categories')->name('categories.')->group(function () {
-        Route::get('', [CategoriesController::class, 'index'])->name('index');
-        Route::post('', [CategoriesController::class, 'store'])->name('store');
-    });
-
-    Route::prefix('sub-categories')->name('sub-categories.')->group(function () {
-        Route::get('', [SubCategoriesController::class, 'index'])->name('index');
-        Route::post('', [SubCategoriesController::class, 'store'])->name('store');
-    });
-
+Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::post('', [OrdersController::class, 'create'])->name('create');
-        Route::get('get-all-user-orders/{user}', [OrdersController::class, 'getUserOrders'])->name('getUserOrders');
+        Route::get('user/{user}', [OrdersController::class, 'getUserOrders'])->name('getUserOrders');
     });
+
+    Route::post('products', [ProductsController::class, 'store'])->name('products.store');
+    Route::patch('products/{product}', [ProductsController::class, 'update'])->name('products.update');
+    Route::delete('products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+
+    Route::post('categories', [CategoriesController::class, 'store'])->name('categories.store');
+
+    Route::post('sub-categories', [SubCategoriesController::class, 'store'])->name('sub-categories.store');
 
     Route::prefix('tenants')->name('tenants.')->group(function () {
-        Route::post('onboard', [TenantsController::class, 'onboardTenant'])->name('onboard');
+        Route::post('', [TenantsController::class, 'onboardTenant'])->name('onboard');
     });
 
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
+
+
+Route::get('products', [ProductsController::class, 'index'])->name('products.index');
+Route::get('products/{product}', [ProductsController::class, 'show'])->name('products.show');
+
+Route::get('categories', [CategoriesController::class, 'index'])->name('categories.index');
+
+Route::get('sub-categories', [SubCategoriesController::class, 'index'])->name('sub-categories.index');
