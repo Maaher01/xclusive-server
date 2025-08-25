@@ -38,6 +38,7 @@ class ProductsController extends Controller
         $this->authorize('create', Product::class);
 
         $product = $this->productRepo->create($request->validated());
+
         Cache::forget('products');
 
         return response()->json(['status' => true, 'data' => $product], 200);
