@@ -2,14 +2,16 @@
 
 namespace App\Providers;
 
-use App\Interfaces\CategoryRepositoryInterface;
-use App\Interfaces\ProductRepositoryInterface;
-use App\Interfaces\SubCategoryRepositoryInterface;
-use App\Repositories\CategoryRepository;
-use App\Repositories\ProductRepository;
-use App\Repositories\SubCategoryRepository;
-use Illuminate\Support\ServiceProvider;
 use App\Services\DiscountService;
+use App\Repositories\ProductRepository;
+use Illuminate\Support\ServiceProvider;
+use App\Repositories\CategoryRepository;
+use App\Repositories\SubCategoryRepository;
+use App\Repositories\ProductImageRepository;
+use App\Interfaces\ProductRepositoryInterface;
+use App\Interfaces\CategoryRepositoryInterface;
+use App\Interfaces\SubCategoryRepositoryInterface;
+use App\Interfaces\ProductImageRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
+        $this->app->bind(ProductImageRepositoryInterface::class, ProductImageRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(SubCategoryRepositoryInterface::class, SubCategoryRepository::class);
     }

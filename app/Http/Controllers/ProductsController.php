@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Interfaces\ProductImageRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 
 class ProductsController extends Controller
 {
     protected $productRepo;
+    protected $productImageRepo;
 
-    public function __construct(ProductRepositoryInterface $productRepo)
+    public function __construct(ProductRepositoryInterface $productRepo, ProductImageRepositoryInterface $productImageRepo)
     {
         $this->productRepo = $productRepo;
+        $this->productImageRepo = $productImageRepo;
     }
 
     /**
@@ -23,7 +26,7 @@ class ProductsController extends Controller
     public function index()
     {
         $products = Cache::remember('products', 600, function () {
-            $products = $this->productRepo->all()->select('id', 'name', 'price', 'discount_amount')->get();
+            $products = $this->productRepo->all();
             return ProductResource::collection($products);
         });
 
@@ -39,9 +42,15 @@ class ProductsController extends Controller
 
         $product = $this->productRepo->create($request->validated());
 
+        if ($request->has('images')) {
+            $this->productImageRepo->addImages($product, $request->images);
+        }
+
         Cache::forget('products');
 
-        return response()->json(['status' => true, 'data' => $product], 200);
+        // dd($request->all());
+
+        return response()->json(['status' => true, 'data' => $product->load('productImages')], 200);
     }
 
     /**

@@ -3,10 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\ProductImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class ProductImageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +16,10 @@ class ProductResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'price' => $this->price,
-            'discount_amount' => $this->discount_amount,
-            'images' => ProductImageResource::collection($this->whenLoaded('productImages'))
+            'product_id' => $this->product_id,
+            'image_path' => $this->image_path ? asset('storage/' . $this->image_path) : null,
+            'is_primary' => $this->is_primary,
+            'sort_order' => $this->sort_order
         ];
     }
 }
