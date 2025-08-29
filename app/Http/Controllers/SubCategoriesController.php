@@ -6,6 +6,7 @@ use App\Http\Requests\SubCategoryRequest;
 use App\Http\Resources\SubCategoryResource;
 use App\Interfaces\SubCategoryRepositoryInterface;
 use App\Models\SubCategory;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class SubCategoriesController extends Controller
@@ -43,6 +44,13 @@ class SubCategoriesController extends Controller
         $subCategory = $this->subCategoryRepo->create($subCategoryData);
 
         return response()->json(['data' => $subCategory, 'status' => true], 200);
+    }
+
+    public function getByCategory(Category $category)
+    {
+        $subCategories = $this->subCategoryRepo->getByCategory($category);
+
+        return response()->json(['data' => $subCategories, 'status' => true], 200);
     }
 
     /**
