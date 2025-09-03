@@ -22,7 +22,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = $this->categoryRepo->all()->select('id', 'name')->get();
+        $categories = $this->categoryRepo->all()->with('subCategory:id,category_id,name')->select('id', 'name')->get();
 
         return response()->json(['data' => CategoryResource::collection($categories), 'status' => true], 200);
     }

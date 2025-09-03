@@ -48,8 +48,6 @@ class ProductsController extends Controller
 
         Cache::forget('products');
 
-        // dd($request->all());
-
         return response()->json(['status' => true, 'data' => $product->load('productImages')], 200);
     }
 
