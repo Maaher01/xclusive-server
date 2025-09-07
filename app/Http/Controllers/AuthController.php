@@ -15,10 +15,9 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'mobile' => 'required|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users|required_without:mobile',
+            'mobile' => 'nullable|string|max:255|unique:users|required_without:email',
             'password' => ['required', 'string', 'confirmed', Password::min(6)->mixedCase()->numbers()],
-            'role' => 'required|in:user,admin,super_admin',
         ]);
 
         $user = User::create([
@@ -26,7 +25,7 @@ class AuthController extends Controller
             'email' => trim($request->email),
             'mobile' => trim($request->mobile),
             'password' => Hash::make($request->password),
-            'role' => $request->role
+            'role' => 'user'
         ]);
 
         SendWelcomeEmail::dispatch($user);
