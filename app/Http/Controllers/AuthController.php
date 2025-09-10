@@ -38,11 +38,16 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'email|required_without:mobile',
+            'mobile' => 'required_without:email',
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        if ($request->filled('email')) {
+            $user = User::where('email', $request->email)->first();
+        } elseif ($request->filled('mobile')) {
+            $user = User::where('mobile', $request->mobile)->first();
+        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
