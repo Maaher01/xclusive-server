@@ -8,6 +8,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\TenantsController;
+use App\Http\Controllers\WishlistController;
 
 Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->name('register');
@@ -27,6 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('categories', [CategoriesController::class, 'store'])->name('categories.store');
 
     Route::post('sub-categories', [SubCategoriesController::class, 'store'])->name('sub-categories.store');
+
+    Route::get('wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
+    Route::post('wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
 
     Route::prefix('tenants')->name('tenants.')->group(function () {
         Route::post('', [TenantsController::class, 'store'])->name('store');
