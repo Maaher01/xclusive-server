@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\WishlistRequest;
-use App\Interfaces\WishlistRepositoryInterface;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use App\Http\Requests\WishlistRequest;
+use App\Interfaces\WishlistRepositoryInterface;
 
 class WishlistController extends Controller
 {
@@ -14,22 +14,6 @@ class WishlistController extends Controller
     public function __construct(WishlistRepositoryInterface $wishlistRepo)
     {
         $this->wishlistRepo = $wishlistRepo;
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -49,11 +33,22 @@ class WishlistController extends Controller
      */
     public function show()
     {
-        $wishlist = Wishlist::where('user_id', auth()->id())->with('product.productImages')->get();
+        $wishlist = Wishlist::where('user_id', auth()->id())
+            ->with('product.productImages')
+            ->get();
+
+        $wishlist->each(function ($item) {
+            $item->product->images = $item->product->productImages;
+            unset($item->product->productImages);
+        });
+
 
         $itemCount = $wishlist->count();
 
-        return response()->json(['data' => $wishlist, 'itemCount' => $itemCount]);
+        return response()->json([
+            'data' => $wishlist,
+            'itemCount' => $itemCount,
+        ]);
     }
 
     /**
