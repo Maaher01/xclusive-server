@@ -49,9 +49,11 @@ class WishlistController extends Controller
      */
     public function show()
     {
-        $wishlist = Wishlist::where('user_id', auth()->id())->with('product')->get();
+        $wishlist = Wishlist::where('user_id', auth()->id())->with('product.productImages')->get();
 
-        return response()->json($wishlist);
+        $itemCount = $wishlist->count();
+
+        return response()->json(['data' => $wishlist, 'itemCount' => $itemCount]);
     }
 
     /**
