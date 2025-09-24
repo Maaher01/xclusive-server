@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
     Route::post('wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('wishlist/{wishlist}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 
     Route::prefix('tenants')->name('tenants.')->group(function () {
         Route::post('', [TenantsController::class, 'store'])->name('store');
