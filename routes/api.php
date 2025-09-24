@@ -40,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-Route::get('products', [ProductsController::class, 'index'])->name('products.index');
+Route::get('products', [ProductsController::class, 'index'])->middleware('throttle:100,1')->name('products.index');
 Route::get('products/{product}', [ProductsController::class, 'show'])->name('products.show');
 
 Route::get('categories', [CategoriesController::class, 'index'])->name('categories.index');
