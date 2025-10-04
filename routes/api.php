@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
@@ -32,6 +33,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
     Route::post('wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('wishlist/{wishlist}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('cart', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
 
     Route::prefix('tenants')->name('tenants.')->group(function () {
         Route::post('', [TenantsController::class, 'store'])->name('store');
